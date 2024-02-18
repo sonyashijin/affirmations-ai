@@ -3,6 +3,9 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Audio } from 'expo-av';
 import { useState, useEffect } from "react";
+import * as FileSystem from "expo-file-system";
+import { useAction } from "convex/react";
+import { api } from "./convex/_generated/api";
 
 const { width, height } = Dimensions.get("window");
 
@@ -10,6 +13,22 @@ export default function Welcome({ navigation }) {
     console.log(navigation);
 
     const [recording, setRecording] = useState();
+    const uploadRecording = useAction(api.recordings.uploadRecording);
+    const getCompletion = useAction(api.recordings.getCompletion);
+
+    const readFileAsBlob = async (fileUri) => {
+        try {
+            const fileInfo = await FileSystem.getInfoAsync(fileUri);
+            if (fileInfo.exists) {
+                const blob = await FileSystem.readAsStringAsync(fileUri, { encoding: FileSystem.EncodingType.Base64 });
+                return blob;
+            } else {
+                throw new Error('File does not exist');
+            }
+        } catch (error) {
+            console.error('Error reading file as blob:', error);
+        }
+    };
 
     const startRecording = async () => {
         try {
@@ -44,34 +63,36 @@ export default function Welcome({ navigation }) {
 
         console.log('Recording stopped and stored at', uri);
 
+        console.log("Moving file");
+        const fileName = `recording-${Date.now()}.m4a`;
+
+        // Move the recording to the new directory with the new file name
+        await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'recordings/', { intermediates: true });
+        await FileSystem.moveAsync({
+            from: uri,
+            to: FileSystem.documentDirectory + 'recordings/' + `${fileName}`
+        });
+        const newUri = FileSystem.documentDirectory + 'recordings/' + `${fileName}`;
+        console.log("Now at:", newUri);
+
         // Upload recording file to Convex
         console.log('Trying to upload file to Convex');
 
-        const response = await fetch(uri);
-        console.log('Fetched file contents', response);
-
-        const recordingBlob = await response.blob();
-        console.log('Got the blob!', recordingBlob);
-
-        const postUrl = await generateUploadUrl();
-        console.log('Got the url!', postUrl);
-
-        console.log('Making post request');
-        const result = await fetch(postUrl, {
-            method: "POST",
-            headers: { "Content-Type": "audio/mp4" }, // !! BAD! I'm hardcoding the file type for the demo
-            body: recordingBlob,
-        });
-        const { storageId } = await result.json();
+        const base64String = await readFileAsBlob(newUri);
+        const storageId = await uploadRecording({ name: "Recording-" + Date.now(), base64String });
 
         console.log("Filed stored at storage id", storageId);
     };
 
+    const buttonGetCompletion = async () => {
+        console.log("Trying to get completion!");
+        const completion = await getCompletion({ text: "Hi! My name is Josh, I'm a CS major at Stanford University. I joined a TreeHacks team last minute, but spent like 5 hours trying to read a stupid file off of this weird expo cross platform thing and now I'm really sad. We've got about 8 hours left, so let's see what we can do!" });
+        console.log(completion);
+    }
+
     useEffect(() => {
         return recording ? stopRecording : undefined;
     }, [recording]);
-
-    // TODO Add cool animations!
 
     return (
         <LinearGradient colors={['#ffd383', '#ffb42c']} style={styles.layout}>
@@ -83,6 +104,7 @@ export default function Welcome({ navigation }) {
             <Button style={styles.button}
                 onPress={() => navigation.navigate('Start')}
                 appearance="filled">Start</Button>
+            <Button onPress={buttonGetCompletion}>Get Completion</Button>
         </LinearGradient>
     )
 }
