@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import VoiceInputSection from './VoiceInputSection';
+import WidgetsPanel from './WidgetsPanel';
 
 const ChatBubble = () => {
   const [currentTime, setCurrentTime] = useState('');
@@ -34,6 +35,7 @@ const ChatBubble = () => {
         </LinearGradient>
       </View>
       <VoiceInputSection />
+      <WidgetsPanel />
     </View>
   );
 };

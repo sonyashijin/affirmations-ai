@@ -11,7 +11,6 @@ import { CONVEX_URL } from "@env";
 import Welcome from "./Welcome";
 import StartScreen from "./Start";
 import ProfileScreen from "./Profile";
-import HomeScreen from "./Home";
 import Onboarding from "./Onboarding";
 import ChatBubble from './Home_dark';
 
