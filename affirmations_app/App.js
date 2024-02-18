@@ -11,10 +11,11 @@ import { CONVEX_URL } from "@env";
 import Welcome from "./Welcome";
 import StartScreen from "./Start";
 import ProfileScreen from "./Profile";
-import HomeScreen from "./Home";
 import Onboarding from "./Onboarding";
 import ChatBubble from './Home_dark';
-
+import PersonalInfoScreen from './PersonalInfo2';
+import FeedbackScreen from './Feedback';
+import ChatInterface from './Home_test';
 // Create a ConvexReactClient instance
 const convex = new ConvexReactClient(CONVEX_URL);
 
@@ -28,10 +29,13 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen name="Onboarding" component={Onboarding} options={{ headerShown: false }} />
-            <Stack.Screen name="Welcome" component={Welcome} />
-            <Stack.Screen name="Start" component={StartScreen} />
-            <Stack.Screen name="Home" component={ChatBubble}  options={{ headerShown: false }} />
+            <Stack.Screen name="Welcome" component={Welcome} options={{ headerShown: false }} />
+            <Stack.Screen name="PersonalInfo" component={PersonalInfoScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Start" component={StartScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Home2" component={ChatBubble}  options={{ headerShown: false }} />
+            <Stack.Screen name="Home" component={ChatInterface}  options={{ headerShown: false }} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="Feedback" component={FeedbackScreen} options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer>
       </ApplicationProvider>
