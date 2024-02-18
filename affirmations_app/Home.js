@@ -59,7 +59,7 @@ const HomeScreen = () => {
     <ImageBackground source={require('./assets/background2.png')} style={styles.container}>
       <View style={styles.topSection}>
         <View style={styles.tasksHeader}>
-          <Text style={styles.tasksCount}>{tasks.length} tasks</Text>
+          <Text style={styles.tasksCount}>{tasks.length} Tasks</Text>
         </View>
         <Text style={styles.greeting}>{greeting()}, Sonya</Text>
       </View>
@@ -106,12 +106,14 @@ const styles = StyleSheet.create({
       marginBottom: 10,
     },
     tasksCount: {
-      fontSize: 12,
-      color: '#ccc',
+      fontSize: 18,
+      color: '#fff',
+      fontWeight: 'semi-bold',
     },
     greeting: {
-      fontSize: 18,
-      fontWeight: 'bold',
+      fontSize: 12,
+      color: '#eee',
+      fontWeight: 'regular',
     },
     glassPanel: {
       flex: 0.5,
