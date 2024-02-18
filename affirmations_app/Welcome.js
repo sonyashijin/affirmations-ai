@@ -14,6 +14,7 @@ export default function Welcome({ navigation }) {
 
     const [recording, setRecording] = useState();
     const uploadRecording = useAction(api.recordings.uploadRecording);
+    const getCompletion = useAction(api.recordings.getCompletion);
 
     const readFileAsBlob = async (fileUri) => {
         try {
@@ -61,15 +62,15 @@ export default function Welcome({ navigation }) {
         const uri = recording.getURI();
 
         console.log('Recording stopped and stored at', uri);
-        
+
         console.log("Moving file");
         const fileName = `recording-${Date.now()}.m4a`;
 
         // Move the recording to the new directory with the new file name
         await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'recordings/', { intermediates: true });
         await FileSystem.moveAsync({
-          from: uri,
-          to: FileSystem.documentDirectory + 'recordings/' + `${fileName}`
+            from: uri,
+            to: FileSystem.documentDirectory + 'recordings/' + `${fileName}`
         });
         const newUri = FileSystem.documentDirectory + 'recordings/' + `${fileName}`;
         console.log("Now at:", newUri);
@@ -78,10 +79,16 @@ export default function Welcome({ navigation }) {
         console.log('Trying to upload file to Convex');
 
         const base64String = await readFileAsBlob(newUri);
-        const storageId = await uploadRecording({name: "Recording-" + Date.now(), base64String});
+        const storageId = await uploadRecording({ name: "Recording-" + Date.now(), base64String });
 
         console.log("Filed stored at storage id", storageId);
     };
+
+    const buttonGetCompletion = async () => {
+        console.log("Trying to get completion!");
+        const completion = await getCompletion({ text: "Hi! My name is Josh, I'm a CS major at Stanford University. I joined a TreeHacks team last minute, but spent like 5 hours trying to read a stupid file off of this weird expo cross platform thing and now I'm really sad. We've got about 8 hours left, so let's see what we can do!" });
+        console.log(completion);
+    }
 
     useEffect(() => {
         return recording ? stopRecording : undefined;
@@ -97,6 +104,7 @@ export default function Welcome({ navigation }) {
             <Button style={styles.button}
                 onPress={() => navigation.navigate('Start')}
                 appearance="filled">Start</Button>
+            <Button onPress={buttonGetCompletion}>Get Completion</Button>
         </LinearGradient>
     )
 }
