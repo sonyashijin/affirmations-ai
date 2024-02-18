@@ -1,11 +1,15 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, TextInput, ScrollView, KeyboardAwareScrollView, Dimensions} from 'react-native';
+import {SafeAreaView, StyleSheet, TextInput, ScrollView, Text as NativeText, KeyboardAwareScrollView, TouchableOpacity, Dimensions} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Block, Button, Text, theme } from "galio-framework";
 import argonTheme from "./constants/Theme";
+import { useNavigation } from '@react-navigation/native';
+
 const { width, height } = Dimensions.get("window");
 
+
 const FeedbackScreen = () => {
+  const navigation = useNavigation();
   const [feedback, onChangeFeedback] = React.useState([]);
   const [cfeedback, onChangeCFeedback] = React.useState("When writing about lifting weights, write using all capital letters.");
   function addFeedback() {
@@ -17,6 +21,9 @@ const FeedbackScreen = () => {
     <SafeAreaView>
       <ScrollView >
       <Block flex style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <NativeText style={styles.backButtonText}>Back</NativeText>
+          </TouchableOpacity>
 
         <Text category="h2">Are there any rules you want us to follow?</Text>
         {
@@ -71,6 +78,15 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.COLORS.BLACK,
     color: theme.COLORS.WHITE,
+  },
+  backButton: {
+    margin: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  backButtonText: {
+    color: theme.COLORS.WHITE,
+    // Add additional styling for the back button text if needed
   },
     input: {
     margin: 12,

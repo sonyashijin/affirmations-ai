@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
 import { View, TextInput, KeyboardAvoidingView, Platform, TouchableOpacity, StyleSheet } from 'react-native';
 import { Icon } from '@ui-kitten/components' // Import the WidgetsPanel component
 
 
-const VoiceInputSection = () => {
+const VoiceInputSection = ({ onMessageSubmit }) => {
+  const [input, setInput] = useState('');
+
+  const handleEnter = () => {
+    onMessageSubmit(input); // Call the callback with the input as argument
+    setInput(''); // Reset input
+  };
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 20}
@@ -17,6 +24,7 @@ const VoiceInputSection = () => {
           style={styles.input}
           placeholder="How are you doing?"
           placeholderTextColor="#9B9B9B"
+          onSubmitEditing={handleEnter}
         />
         <TouchableOpacity style={styles.micButton}>
           <Icon name='mic-outline' fill='#9B9B9B' style={styles.micIcon} />
@@ -58,6 +66,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
+
 });
 
 export default VoiceInputSection;
