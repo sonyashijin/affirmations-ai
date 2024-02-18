@@ -4,12 +4,18 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { api } from './convex/_generated/api';
 import { useRoute } from '@react-navigation/native';
+import { useAction } from 'convex/react';
+import Welcome from './Welcome';
+import * as FileSystem from "expo-file-system";
+import { Audio } from 'expo-av';
 
 const ChatInterface = () => {
   const route = useRoute();
   const userInfo = route.params?.userInfo;
   const [inputText, setInputText] = useState('');
   const [messages, setMessages] = useState([]);
+
+  const [waitingForResponse, setWaitingForResponse] = useState();
   
 
   console.log(userInfo);
@@ -80,9 +86,9 @@ const ChatInterface = () => {
 
     console.log("Now at:", newUri);
 
-    const playbackObject = new Audio.Sound();
-    await playbackObject.loadAsync({ uri: newUri });
-    await playbackObject.playAsync();
+    // const playbackObject = new Audio.Sound();
+    // await playbackObject.loadAsync({ uri: newUri });
+    // await playbackObject.playAsync();
 
     // Upload recording file to Convex
     console.log('Trying to upload file to Convex');
@@ -91,7 +97,66 @@ const ChatInterface = () => {
     const storageId = await uploadRecording({ name: "Recording-" + Date.now(), base64String });
 
     console.log("Filed stored at storage id", storageId);
+
+    // Run voice completion
+    await wrapperGetVoiceCompletion(storageId);
+    console.log("WE're done!");
   };
+
+  const wrapperGetVoiceCompletion = async (originalStorageId) => {
+    console.log("Trying to get completion!");
+    setWaitingForResponse(true);
+    const newUri = await getVoiceCompletion({storageId: originalStorageId});
+
+    await Audio.requestPermissionsAsync();
+    await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+    });
+
+    // const newUri = 'https://rightful-buzzard-92.convex.cloud/api/storage/92e2ffe0-f2e0-4f8b-9840-fce137298ee8';
+    const fileUri = FileSystem.documentDirectory + 'recordings/' + 'recordingss-' + Date.now() + ".wav";
+
+    await FileSystem.downloadAsync(newUri, fileUri);
+    console.log('Finished downloading to ', fileUri);
+    await playAudio(fileUri);
+    setWaitingForResponse(false);
+}
+
+const playAudio = async (fileUri) => {
+    try {
+        console.log('Requesting permissions..');
+
+        await Audio.requestPermissionsAsync();
+        await Audio.setAudioModeAsync({
+            allowsRecordingIOS: true,
+            playsInSilentModeIOS: true,
+        });
+
+        console.log("Finished perms");
+        // await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'recordings-temp/', { intermediates: true });
+        // await FileSystem.moveAsync({
+        //     from: fileUri,
+        //     to: FileSystem.documentDirectory + 'recordings-temp/testttt.m4a'
+        //   });
+
+        const playbackObject = new Audio.Sound();
+        console.log("Object made, attempting load");
+        // await playbackObject.loadAsync({ uri: FileSystem.documentDirectory + 'recordings-temp/testttt.m4a' });
+        await playbackObject.loadAsync({ uri: fileUri }, {shouldPlay: true});
+        console.log("Load finished, now playing");
+        await playbackObject.playAsync();
+        // Your sound is playing!
+
+        // Dont forget to unload the sound from memory
+        // when you are done using the Sound object
+        // await sound.unloadAsync();
+    } catch (error) {
+        // An error occurred!
+        console.error('AUDIO PLAY: ', error);
+    }
+}
+
 
   const handleSendMessage = async () => {
     const userMessage = inputText.trim();
@@ -156,6 +221,19 @@ const ChatInterface = () => {
             </LinearGradient>
           </View>
         ))}
+        {
+          waitingForResponse && (
+          <View style={[styles.messageBubble, styles.leftBubble]}>
+            <LinearGradient
+              colors={['#7018f9', '#534ffa']}
+              style={styles.gradientBubble}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}>
+              <Text style={styles.messageText}>{"I'm working on a live speech response for you!"}</Text>
+            </LinearGradient>
+          </View>
+          )
+        }
       </ScrollView>
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.inputContainer}>
         <TextInput
@@ -174,6 +252,7 @@ const ChatInterface = () => {
           <Icon name="mic" size={24} color="#FFF" />
         </TouchableOpacity>
       </KeyboardAvoidingView>
+      {/* <Welcome /> */}
     </View>
   );
 };
