@@ -1,7 +1,13 @@
 import { Layout, Text, Button } from "@ui-kitten/components";
 import { StyleSheet, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Audio } from 'expo-av';
+import {
+    Audio,
+    InterruptionModeAndroid,
+    InterruptionModeIOS,
+    ResizeMode,
+    Video
+} from 'expo-av';
 import { useState, useEffect } from "react";
 import * as FileSystem from "expo-file-system";
 import { useAction } from "convex/react";
@@ -13,8 +19,10 @@ export default function Welcome({ navigation }) {
     console.log(navigation);
 
     const [recording, setRecording] = useState();
+
     const uploadRecording = useAction(api.recordings.uploadRecording);
     const getCompletion = useAction(api.recordings.getCompletion);
+    const getVoiceCompletion = useAction(api.recordings.getVoiceCompletion);
 
     const readFileAsBlob = async (fileUri) => {
         try {
@@ -73,7 +81,12 @@ export default function Welcome({ navigation }) {
             to: FileSystem.documentDirectory + 'recordings/' + `${fileName}`
         });
         const newUri = FileSystem.documentDirectory + 'recordings/' + `${fileName}`;
+
         console.log("Now at:", newUri);
+
+        const playbackObject = new Audio.Sound();
+        await playbackObject.loadAsync({ uri: newUri });
+        await playbackObject.playAsync();
 
         // Upload recording file to Convex
         console.log('Trying to upload file to Convex');
@@ -90,9 +103,72 @@ export default function Welcome({ navigation }) {
         console.log(completion);
     }
 
+    const buttonGetVoiceCompletion = async () => {
+        console.log("Trying to get completion!");
+
+        const newUri = await getVoiceCompletion({storageId: "kg211hbxmrdkw39bk724b7zh9d6kpbjn"});
+
+        await Audio.requestPermissionsAsync();
+        await Audio.setAudioModeAsync({
+            allowsRecordingIOS: true,
+            playsInSilentModeIOS: true,
+        });
+
+        // const newUri = 'https://rightful-buzzard-92.convex.cloud/api/storage/92e2ffe0-f2e0-4f8b-9840-fce137298ee8';
+        // console.log("Voice response at", newUri);
+        const fileUri = FileSystem.documentDirectory + 'recordings/' + 'recordingss-' + Date.now() + ".wav";
+
+        await FileSystem.downloadAsync(newUri, fileUri);
+        console.log('Finished downloading to ', fileUri);
+        // const fileUri = FileSystem.documentDirectory + 'recordings/example.mp3';
+        await playAudio(fileUri);
+    }
+
+    const playAudio = async (fileUri) => {
+        try {
+            console.log('Requesting permissions..');
+
+            await Audio.requestPermissionsAsync();
+            await Audio.setAudioModeAsync({
+                allowsRecordingIOS: true,
+                playsInSilentModeIOS: true,
+            });
+
+            console.log("Finished perms");
+            // await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'recordings-temp/', { intermediates: true });
+            // await FileSystem.moveAsync({
+            //     from: fileUri,
+            //     to: FileSystem.documentDirectory + 'recordings-temp/testttt.m4a'
+            //   });
+    
+            const playbackObject = new Audio.Sound();
+            console.log("Object made, attempting load");
+            // await playbackObject.loadAsync({ uri: FileSystem.documentDirectory + 'recordings-temp/testttt.m4a' });
+            await playbackObject.loadAsync({ uri: fileUri }, {shouldPlay: true});
+            console.log("Load finished, now playing");
+            await playbackObject.playAsync();
+            // Your sound is playing!
+
+            // Dont forget to unload the sound from memory
+            // when you are done using the Sound object
+            // await sound.unloadAsync();
+        } catch (error) {
+            // An error occurred!
+            console.error('AUDIO PLAY: ', error);
+        }
+    }
+
     useEffect(() => {
         return recording ? stopRecording : undefined;
     }, [recording]);
+
+    // useEffect(() => {
+    //     return sound
+    //         ? () => {
+    //             sound.unloadAsync();
+    //         }
+    //         : undefined;
+    // }, [sound]);
 
     return (
         <LinearGradient colors={['#ffd383', '#ffb42c']} style={styles.layout}>
@@ -105,6 +181,7 @@ export default function Welcome({ navigation }) {
                 onPress={() => navigation.navigate('Start')}
                 appearance="filled">Start</Button>
             <Button onPress={buttonGetCompletion}>Get Completion</Button>
+            <Button onPress={buttonGetVoiceCompletion}>Get Voice Completion</Button>
         </LinearGradient>
     )
 }
