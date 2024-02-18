@@ -83,9 +83,9 @@ const HomeScreen = () => {
             style={styles.profileIcon}
           />
         </TouchableOpacity>
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <Image source={require('./assets/chatIcon.png')} style={styles.chatIcon} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </ImageBackground>
   );

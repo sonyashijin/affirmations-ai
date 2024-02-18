@@ -14,6 +14,7 @@ import Welcome from "./Welcome";
 import StartScreen from "./Start"; // Create this component
 import HomeChatScreen from "./Home";
 import ProfileScreen from "./Profile";
+import HomeScreen from "./Home";
 
 const Stack = createNativeStackNavigator();
 const convex = new ConvexReactClient(process.env.CONVEX_URL, {
@@ -29,7 +30,7 @@ export default function App() {
           <Stack.Navigator>
             <Stack.Screen name="Welcome" component={Welcome} />
             <Stack.Screen name="Start" component={StartScreen} />
-            <Stack.Screen name="Home" component={HomeChatScreen} />
+            <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
           </Stack.Navigator>
         </NavigationContainer>
