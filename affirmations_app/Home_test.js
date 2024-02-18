@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { api } from './convex/_generated/api';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import { useAction } from 'convex/react';
 import Welcome from './Welcome';
 import * as FileSystem from "expo-file-system";
 import { Audio } from 'expo-av';
+import ProfileScreen from './Profile';
+
+
 
 const ChatInterface = () => {
   const route = useRoute();
@@ -16,6 +19,7 @@ const ChatInterface = () => {
   const [messages, setMessages] = useState([]);
 
   const [waitingForResponse, setWaitingForResponse] = useState();
+  const navigation = useNavigation();
   
 
   console.log(userInfo);
@@ -210,6 +214,9 @@ const playAudio = async (fileUri) => {
 
   return (
     <View style={styles.container}>
+              <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={styles.profileContainer}>
+        <Image source={require('./assets/headshot.png')} style={styles.profileImage} />
+      </TouchableOpacity>
       <ScrollView style={styles.messagesContainer}>
         {messages.map((message, index) => (
           <View key={message.id} style={[styles.messageBubble, message.sender === 'user' ? styles.rightBubble : styles.leftBubble]}>
@@ -263,6 +270,16 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     flex: 1,
     backgroundColor: '#121212', // Dark mode background color
+  },
+  profileContainer: {
+    position: 'absolute',
+    top: 30,
+    right: 30,
+  },
+  profileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 100,
   },
   iconContainer: {
     justifyContent: 'center', // Centers the icon vertically if needed

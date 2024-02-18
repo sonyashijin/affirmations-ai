@@ -1,38 +1,42 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, TextInput, ScrollView, KeyboardAwareScrollView, Dimensions} from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { SafeAreaView, StyleSheet, TextInput, ScrollView, Dimensions } from 'react-native';
 import { Block, Button, Text, theme } from "galio-framework";
-import argonTheme from "./constants/Theme";
-import {Card} from 'react-native-elements';
-const { width, height } = Dimensions.get("window");
+import { Card } from 'react-native-elements';
+
+const { width } = Dimensions.get("window");
+
 const EventCard = ({ props }) => {
-  return <Card style={{margin: 10}}>
-    
-    <Card.Title>{props.title}</Card.Title>
-    <Text>{props.description}</Text>
-    <Text>{props.repeat} at {props.datetime}</Text>
-    <Text>{props.medium}</Text>
-    <Text>{props.additionalInfo}</Text>
-    </Card>;
+  return (
+    <Card containerStyle={styles.eventCard}>
+      <Card.Title style={styles.eventTitle}>{props.title}</Card.Title>
+      <Text style={styles.eventText}>{props.description}</Text>
+      <Text style={styles.eventText}>{props.repeat} at {props.datetime}</Text>
+      <Text style={styles.eventText}>{props.medium}</Text>
+      <Text style={styles.eventText}>{props.additionalInfo}</Text>
+    </Card>
+  );
 };
 
 const EventsScreen = () => {
-  const [events, onChangeEvents] = React.useState([{
-    title: "Cardio",
-    description: "Cardio workout.",
-    datetime: "2022-12-31, 12:00",
-    medium: "text",
-    additionalInfo: "motivate me",
-    repeat: "weekly, monday wednesday friday"
-  },
-  {
-    title: "Lifting weights",
-    description: "We will be lifting weights at the gym. Please bring your own weights.",
-    datetime: "2022-12-31, 12:00",
-    medium: "text",
-    additionalInfo: "motivate me",
-    repeat: "weekly, monday wednesday friday"
-  }]);
+  const [events, onChangeEvents] = React.useState([
+    {
+      title: "Cardio",
+      description: "Cardio workout.",
+      datetime: "2022-12-31, 12:00",
+      medium: "text",
+      additionalInfo: "motivate me",
+      repeat: "weekly, monday wednesday friday"
+    },
+    {
+      title: "Lifting weights",
+      description: "We will be lifting weights at the gym. Please bring your own weights.",
+      datetime: "2022-12-31, 12:00",
+      medium: "text",
+      additionalInfo: "motivate me",
+      repeat: "weekly, monday wednesday friday"
+    }
+  ]);
+
   const [event, onChangeEvent] = React.useState({
     title: "Pitching at TreeHacks",
     description: "My team and I are about to give a pitch at TreeHacks for the project we just spent the last 36 hours working on.",
@@ -41,122 +45,122 @@ const EventsScreen = () => {
     additionalInfo: "We really want to win this competition.",
     repeat: "once"
   });
+
   function updateEvent(event1, param){
     onChangeEvent({[param]: event1});
   }
+
   const EventCardEdit = () => {
-    return <Card style={{margin: 10}}>
-      <TextInput value={event.title} onChangeText={(e) => {
-        updateEvent(e, "title");
-       }}/>
-      <TextInput value={event.description} onChangeText={(e) => {
-        updateEvent(e, "description");
-       }}/>
-<TextInput value={event.repeat} onChangeText={(e) => {
-        updateEvent(e, "repeat");
-       }}/>
-       <TextInput value={event.datetime} onChangeText={(e) => {
-        updateEvent(e, "datetime");
-       }}/>
-       <TextInput value={event.medium} onChangeText={(e) => {
-        updateEvent(e, "medium");
-       }}/>
-       <TextInput value={event.additionalInfo} onChangeText={(e) => {
-        updateEvent(e, "additionalInfo");
-       }}/>
-      </Card>;
+    return (
+      <Card containerStyle={styles.eventCard}>
+        <TextInput
+          value={event.title}
+          onChangeText={(e) => updateEvent(e, "title")}
+          style={styles.input}
+        />
+        <TextInput
+          value={event.description}
+          onChangeText={(e) => updateEvent(e, "description")}
+          style={styles.input}
+        />
+        <TextInput
+          value={event.repeat}
+          onChangeText={(e) => updateEvent(e, "repeat")}
+          style={styles.input}
+        />
+        <TextInput
+          value={event.datetime}
+          onChangeText={(e) => updateEvent(e, "datetime")}
+          style={styles.input}
+        />
+        <TextInput
+          value={event.medium}
+          onChangeText={(e) => updateEvent(e, "medium")}
+          style={styles.input}
+        />
+        <TextInput
+          value={event.additionalInfo}
+          onChangeText={(e) => updateEvent(e, "additionalInfo")}
+          style={styles.input}
+        />
+      </Card>
+    );
   };
   
   function add() {
     onChangeEvents([...events, event]);
-    onChangeEvent({title: "", description: "", date: "", time: "", medium: "", additionalInfo: ""});
+    onChangeEvent({
+      title: "",
+      description: "",
+      date: "",
+      time: "",
+      medium: "",
+      additionalInfo: ""
+    });
   }
-  return (
-    <SafeAreaView>
-      <ScrollView >
-      <Block flex style={styles.container}>
-        <Text category="h2">Events</Text>
-        {
-          events.map((f, i) => {
-            return <EventCard props={f} edit={false} key={i}/>
-          })
-        }
-        <EventCardEdit />
-        <Button title="Add" style={styles.button} onPress={add}>Add feedback</Button>
-        </Block>
-        </ScrollView>
-    </SafeAreaView>
 
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <Block flex style={styles.container}>
+          <Text category="h2">Events</Text>
+          {events.map((f, i) => <EventCard props={f} edit={false} key={i} />)}
+          <EventCardEdit />
+          <Button title="Add" style={styles.button} onPress={add}>Add feedback</Button>
+        </Block>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
-// const styles = StyleSheet.create({
-//   input: {
-//     margin: 12,
-//     borderWidth: 1,
-//     padding: 10,
-//     height:80, textAlignVertical: 'top'
-//   },
-//   label: {
-//     margin: 12,
-//     marginBottom: 0,
-//   },
-//   title: {
-//     fontSize: 24,
-//     fontWeight: 'bold',
-//   },
-//   layout: {
-//     flex: 1,
-//     width: width,
-//     height: height,
-//     display: "flex",
-//     flexDirection: "column",
-//     justifyContent: "center",
-//     alignItems: 'center',
-// },
-// button: {
-//     marginVertical: 8,
-//     minWidth: 200,
-// }
-  
-// });
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: theme.COLORS.BLACK, // Dark mode background color
+  },
+  scrollView: {
+    flexGrow: 1,
+    paddingHorizontal: 10, // Add horizontal padding for better spacing
+    paddingVertical: 20, // Add vertical padding for better spacing
+  },
   container: {
-    // backgroundColor: theme.COLORS.BLACK,
-    // color: theme.COLORS.WHITE,
+    alignItems: 'center',
   },
-    input: {
-    margin: 12,
+  input: {
+    marginVertical: 8, // Add margin for better spacing
     borderWidth: 1,
+    borderColor: theme.COLORS.WHITE, // White border color for dark mode
     padding: 10,
-    height:80, textAlignVertical: 'top',
-    color: theme.COLORS.WHITE
-  },
-
-  padded: {
-    paddingHorizontal: theme.SIZES.BASE * 2,
-    position: "relative",
-    bottom: theme.SIZES.BASE,
-    zIndex: 2,
+    color: theme.COLORS.WHITE, // Text color for dark mode
   },
   button: {
-    width: width - theme.SIZES.BASE * 4,
-    height: theme.SIZES.BASE * 3,
-    shadowRadius: 0,
-    shadowOpacity: 0
+    marginVertical: 8,
+    minWidth: 200,
+    backgroundColor: theme.COLORS.PRIMARY, // Primary button color for dark mode
+    borderRadius: 50, // Rounded corners for the button
+    justifyContent: 'center', // Center align button text
+    alignItems: 'center', // Center align button text
   },
-  logo: {
-    width: 300,
-    height: 100,
-    zIndex: 2,
-    position: 'relative',
-    marginTop: '-50%'
+  buttonText: {
+    color: theme.COLORS.WHITE, // White text color for dark mode
+    fontSize: 16,
+    fontWeight: 'bold',
   },
-  title: {
-    marginTop:'-5%'
+  eventCard: {
+    marginVertical: 8,
+    backgroundColor: theme.COLORS.GRAY, // Gray background for event card
+    padding: 10,
+    borderRadius: 10, // Rounded corners for event card
   },
-  subTitle: {
-    marginTop: 20
-  }
+  eventTitle: {
+    color: theme.COLORS.WHITE, // White text color for event title
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  eventText: {
+    color: theme.COLORS.WHITE, // White text color for event details
+    fontSize: 14,
+  },
 });
+
 export default EventsScreen;

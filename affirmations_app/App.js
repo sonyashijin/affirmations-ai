@@ -35,7 +35,7 @@ export default function App() {
             <Stack.Screen name="Start" component={StartScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Home2" component={ChatBubble}  options={{ headerShown: false }} />
             <Stack.Screen name="Home" component={ChatInterface}  options={{ headerShown: false }} />
-            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }}/>
             <Stack.Screen name="Feedback" component={FeedbackScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Events" component={EventsScreen} options={{ headerShown: false }} />
           </Stack.Navigator>
