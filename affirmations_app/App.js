@@ -13,6 +13,7 @@ import StartScreen from "./Start";
 import ProfileScreen from "./Profile";
 import Onboarding from "./Onboarding";
 import ChatBubble from './Home_dark';
+import PersonalInfoScreen from './PersonalInfo2';
 
 // Create a ConvexReactClient instance
 const convex = new ConvexReactClient(CONVEX_URL);
@@ -28,6 +29,7 @@ export default function App() {
           <Stack.Navigator>
             <Stack.Screen name="Onboarding" component={Onboarding} options={{ headerShown: false }} />
             <Stack.Screen name="Welcome" component={Welcome} />
+            <Stack.Screen name="PersonalInfo" component={PersonalInfoScreen} />
             <Stack.Screen name="Start" component={StartScreen} />
             <Stack.Screen name="Home" component={ChatBubble}  options={{ headerShown: false }} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
