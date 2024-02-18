@@ -69,48 +69,61 @@ const ChatInterface = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5FCFF',
-  },
-  messagesContainer: {
-    flex: 1,
-    padding: 10,
-  },
-  messageBubble: {
-    padding: 8,
-    borderRadius: 20,
-    marginBottom: 10,
-    maxWidth: '80%',
-  },
-  rightBubble: {
-    alignSelf: 'flex-end',
-  },
-  leftBubble: {
-    alignSelf: 'flex-start',
-  },
-  gradientBubble: {
-    borderRadius: 20,
-    padding: 15,
-  },
-  messageText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    padding: 10,
-    backgroundColor: '#fff',
-  },
-  input: {
-    flex: 1,
-    height: 40,
-    borderColor: '#CCC',
-    borderWidth: 1,
-    borderRadius: 20,
-    paddingHorizontal: 10,
-    marginRight: 10,
-  },
-});
+    container: {
+      paddingTop: 40,
+      flex: 1,
+      backgroundColor: '#121212', // Dark mode background color
+    },
+    iconContainer: {
+        justifyContent: 'center', // Centers the icon vertically if needed
+        height: '100%', // Ensure the touchable area is the same height as the input container
+      },
+    messagesContainer: {
+      flex: 1,
+      padding: 10,
+    },
+    messageBubble: {
+      padding: 8,
+      borderRadius: 20,
+      marginBottom: 10,
+      maxWidth: '80%',
+    },
+    rightBubble: {
+      alignSelf: 'flex-end',
+      marginRight: 10, // Ensures padding from the right edge
+    },
+    leftBubble: {
+      alignSelf: 'flex-start',
+      marginLeft: 10, // Ensures padding from the left edge
+    },
+    gradientBubble: {
+      borderRadius: 20,
+      padding: 15,
+    },
+    messageText: {
+      color: '#fff', // Text color for dark mode
+    },
+    inputContainer: {
+      flexDirection: 'row',
+      padding: 10,
+      bottom: 50,
+      alignContent: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#1E1E1E', // Darker shade for the input area
+      borderTopWidth: 1,
+      alignItems: 'center',
+      borderColor: '#333', // Slight border for the input area
+    },
+    input: {
+      flex: 1,
+      height: 40,
+      backgroundColor: '#333', // Dark input field
+      color: '#fff', // Text input color for dark mode
+      paddingHorizontal: 10,
+      borderRadius: 20,
+      marginRight: 10,
+    },
+  });
+  
 
 export default ChatInterface;
