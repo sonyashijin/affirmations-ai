@@ -28,9 +28,9 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen name="Onboarding" component={Onboarding} options={{ headerShown: false }} />
-            <Stack.Screen name="Welcome" component={Welcome} />
-            <Stack.Screen name="PersonalInfo" component={PersonalInfoScreen} />
-            <Stack.Screen name="Start" component={StartScreen} />
+            <Stack.Screen name="Welcome" component={Welcome} options={{ headerShown: false }} />
+            <Stack.Screen name="PersonalInfo" component={PersonalInfoScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Start" component={StartScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Home" component={ChatBubble}  options={{ headerShown: false }} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
           </Stack.Navigator>
