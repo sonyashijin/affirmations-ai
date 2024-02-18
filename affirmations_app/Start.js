@@ -45,9 +45,7 @@ export default function Start({ navigation }) {
     } else {
       console.log('Completed Quiz', answers);
       navigation.navigate('Home');
-      // Here, handle the completion of the quiz,
-      // such as navigating to a different screen or showing results.
-      // navigation.navigate('Results', { answers });
+
     }
   };
 
