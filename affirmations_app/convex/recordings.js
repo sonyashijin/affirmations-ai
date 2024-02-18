@@ -2,10 +2,11 @@ import { action, internalMutation, mutation, query } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { v } from "convex/values";
 
+// Upload recorded audio file and add DB entry for it
+
 export const uploadRecording = action({
     args: {name: v.string(), base64String: v.string()},
     handler: async (ctx, args) => {
-        
         // Convert base64 string into byte array
         const byteCharacters = atob(args.base64String);
         const byteNumbers = new Array(byteCharacters.length);
@@ -38,3 +39,22 @@ export const addRecording = internalMutation({
         await ctx.db.insert("recordings", { name, storageId });
     }
 });
+
+// Send in text for model completion
+export const getCompletion = action({
+    args: {text: v.string()},
+    handler: async (ctx, args) => {
+        // Post to Trevor's Modal route
+        const response = await fetch("https://tmychow--sts-web.modal.run/text_response", {
+            method: "POST",
+            body: JSON.stringify({
+                text: args.text
+            })
+        });
+        
+        const completion = await response.text();
+        console.log("Completion returned:", completion);
+
+        return completion;
+    }
+})
