@@ -57,4 +57,40 @@ export const getCompletion = action({
 
         return completion;
     }
-})
+});
+
+// Send in text for model completion
+export const getVoiceCompletion = action({
+    args: {storageId: v.id("_storage")},
+    handler: async (ctx, args) => {
+        // Grab blob from hosted file
+        console.log("In here!")
+        const fileUrl = await ctx.storage.getUrl(args.storageId);
+        console.log("File Url:", fileUrl);
+
+        const fileResponse = await fetch(fileUrl);
+        const fileBlob = await fileResponse.blob();
+
+        const formData = new FormData();
+        formData.append("audio", fileBlob);
+
+        console.log("Turned into form data:", formData);
+
+        // Post to Trevor's Modal route
+        const response = await fetch("https://tmychow--sts-web.modal.run/voice_response", {
+            method: "POST",
+            body: formData
+        });
+        
+        console.log("Got voice completion response:", response);
+
+        const voiceBlob = await response.blob();
+        console.log("Completion blob:", voiceBlob);
+
+        // Upload blob and return URL
+        const voiceStorageId = await ctx.storage.store(voiceBlob);
+        const voiceStorageURL = await ctx.storage.getUrl(voiceStorageId);
+
+        return voiceStorageURL;
+    }
+});
