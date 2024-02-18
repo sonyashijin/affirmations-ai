@@ -22,8 +22,9 @@ const PersonalInfoScreen = () => {
 
 return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-      <TextInput
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        <Text style={styles.screenTitle}>A Little More About You</Text>
+        <TextInput
         style={styles.input}
         placeholder='Name'
         placeholderTextColor="#A9A9A9"
@@ -49,7 +50,7 @@ return (
       <Text style={styles.label}>What are your most important values?</Text>
       <TextInput
         style={{...styles.input, height:200, textAlignVertical: 'top',}}
-        placeholder="Honestly, family, etc"
+        placeholder="Honesty, family, etc"
         multiline={true}
         numberOfLines={4}
         placeholderTextColor="#A9A9A9"
@@ -76,7 +77,7 @@ return (
           // Disable the button if not all fields are filled out
           onPress={() => {
             // Navigate to Home_dark screen
-            navigation.navigate('Home_dark');
+            navigation.navigate('Home');
           }}
         />
 </ScrollView>
@@ -87,7 +88,7 @@ return (
 const styles = StyleSheet.create({
     input: {
         height: 40,
-        margin: 12,
+        margin: 20,
         borderWidth: 1,
         borderColor: 'rgba(255, 255, 255, 0.2)', // Slightly visible border
         padding: 10,
@@ -103,23 +104,37 @@ const styles = StyleSheet.create({
       label: {
         color: '#fff', // Light colored text for visibility
         margin: 12,
+        textAlign: 'center',
+        paddingHorizontal: 10,
         marginBottom: 0,
-        marginLeft: 12, // Align left margin with the input fields
-        marginRight: 12, // Align right margin for consistency
+        paddingVertical: 10,
+
+        alignContent: 'center',
       },
     buttonContainer: {
-      margin: 12,
-      borderRadius: 10, // Optional: if you want rounded edges on your button
+      margin: 20,
+      borderRadius: 20, // Optional: if you want rounded edges on your button
     },
     buttonTitle: {
       color: '#FFF', // Button text color
+      alignContent: 'center',
     },
     container: {
       flex: 1,
       backgroundColor: '#303030',
-      paddingTop: 20, // Add padding at the top for overall spacing from the screen edge
-      paddingBottom: 20, // Add padding at the bottom for scrolling space
+      paddingTop: 50, // Add padding at the top for overall spacing from the screen edge
+      paddingBottom: 50, // Add padding at the bottom for scrolling space
     },
+
+    screenTitle: {
+        marginTop: 70,
+        marginBottom: 50,
+        color: '#fff',
+        fontSize: 24,
+        fontWeight: 'bold',
+        margin: 12,
+        textAlign: 'center', // Center the title
+      },
   });
 
 export default PersonalInfoScreen;
