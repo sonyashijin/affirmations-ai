@@ -57,14 +57,6 @@ class Onboarding extends React.Component {
                 >
                   Get Started
                 </Button>
-                <Button
-                  style={styles.button}
-                  color={argonTheme.COLORS.SECONDARY}
-                  onPress={() => navigation.navigate("Welcome")}
-                  textStyle={{ color: argonTheme.COLORS.BLACK }}
-                >
-                  FOR JOSH
-                </Button>
               </Block>
           </Block>
         </Block>
