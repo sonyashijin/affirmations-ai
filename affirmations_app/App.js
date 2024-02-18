@@ -10,6 +10,7 @@ import { CONVEX_URL } from "@env";
 
 import Welcome from "./Welcome";
 import StartScreen from "./Start";
+import EventsScreen from "./Events";
 import ProfileScreen from "./Profile";
 import Onboarding from "./Onboarding";
 import ChatBubble from './Home_dark';
@@ -27,12 +28,13 @@ export default function App() {
       <ApplicationProvider {...eva} theme={eva.light}>
         <NavigationContainer>
           <Stack.Navigator>
-            <Stack.Screen name="Onboarding" component={Onboarding} options={{ headerShown: false }} />
+            {/* <Stack.Screen name="Onboarding" component={Onboarding} options={{ headerShown: false }} />
             <Stack.Screen name="Welcome" component={Welcome} options={{ headerShown: false }} />
             <Stack.Screen name="PersonalInfo" component={PersonalInfoScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Start" component={StartScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Home" component={ChatBubble}  options={{ headerShown: false }} />
-            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="Profile" component={ProfileScreen} />  */}
+            <Stack.Screen name="EventsScreen" component={EventsScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </ApplicationProvider>
