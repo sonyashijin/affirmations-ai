@@ -160,7 +160,8 @@ const playAudio = async (fileUri) => {
 
   const handleSendMessage = async () => {
     const userMessage = inputText.trim();
-    const fullMessage = userInfo ? `${userMessage} | UserInfo: ${userInfo}` : userMessage;
+    const fullMessage = userInfo ? `${userMessage} <sep> UserInfo: ${userInfo}` : userMessage;
+
     if (!userMessage) return; // Prevent sending empty messages
 
     // Display user message immediately

@@ -16,6 +16,7 @@ import ChatBubble from './Home_dark';
 import PersonalInfoScreen from './PersonalInfo2';
 import FeedbackScreen from './Feedback';
 import ChatInterface from './Home_test';
+import EventsScreen from './Events';
 // Create a ConvexReactClient instance
 const convex = new ConvexReactClient(CONVEX_URL);
 
@@ -36,6 +37,7 @@ export default function App() {
             <Stack.Screen name="Home" component={ChatInterface}  options={{ headerShown: false }} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="Feedback" component={FeedbackScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Events" component={EventsScreen} options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer>
       </ApplicationProvider>
