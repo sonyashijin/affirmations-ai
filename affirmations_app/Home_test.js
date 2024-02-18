@@ -2,13 +2,20 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useRoute } from '@react-navigation/native';
 
 const ChatInterface = () => {
+  const route = useRoute();
+  const userInfo = route.params?.userInfo;
   const [inputText, setInputText] = useState('');
   const [messages, setMessages] = useState([]);
+  
+
+  console.log(userInfo);
 
   const handleSendMessage = async () => {
     const userMessage = inputText.trim();
+    const fullMessage = userInfo ? `${userMessage} | UserInfo: ${userInfo}` : userMessage;
     if (!userMessage) return; // Prevent sending empty messages
 
     // Display user message immediately
@@ -16,7 +23,8 @@ const ChatInterface = () => {
     setInputText(''); // Clear input field
 
     // Prepare data for the API call
-    const data = { text: userMessage };
+    const data = { text: fullMessage };
+    console.log(data);
     try {
       const response = await fetch("https://tmychow--sts-web.modal.run/text_response", {
         method: 'POST',

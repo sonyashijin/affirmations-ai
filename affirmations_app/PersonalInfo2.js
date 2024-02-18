@@ -22,19 +22,14 @@ const PersonalInfoScreen = () => {
 
   const handleSubmit = () => {
     if (allFieldsFilled()) {
-      // Concatenate the information with a simple delimiter
       const userInfo = `Name: ${name}|Phone: ${phoneNumber}|Email: ${email}|Age: ${age}|Values: ${values}|People: ${people}|Goals: ${goals}`;
       
-      // Example: Navigate while passing the concatenated information
-      navigation.navigate('NextScreen', { userInfo });
-  
-      // If you need to chain this in a system prompt or another operation, it's ready
-      console.log(userInfo); // Log it or use it as needed
+      // Navigate to the Home screen and pass userInfo as a parameter
+      navigation.navigate('Home', { userInfo: userInfo });
     } else {
       alert('Please fill out all fields.');
     }
   };
-  
 
 return (
     <SafeAreaView style={styles.container}>
@@ -104,15 +99,10 @@ return (
         value={goals}
       />
 
-      <Button
-          title="Submit"
-          // Disable the button if not all fields are filled out
-          onPress={() => {
-            onPress={handleSubmit}
-            // Navigate to Home_dark screen
-            navigation.navigate('Home');
-          }}
-        />
+    <Button
+    title="Submit"
+    onPress={handleSubmit} // Correct way to assign the function
+    />
 </ScrollView>
     </SafeAreaView>
   );
